@@ -81,10 +81,32 @@ const board = (function () {
                 inputController.showWinDraw(true);
                 active = false;
             } else {
-            currentPlayer = 1 - currentPlayer;
-            showActivePlayer();
+                currentPlayer = 1 - currentPlayer;
+                showActivePlayer();
+                if (players[currentPlayer].ai){
+                    aiMove();
+                }
             }
         }
+    }
+
+    function aiMove(){
+        let move = aiController.stupidMove(getBoardMap(), playerMarkers[currentPlayer]);
+        boardHTML[move].innerHTML = playerMarkers[currentPlayer];
+        if (checkWin()){
+            inputController.showWinDraw(false, players[currentPlayer].playername);
+            active = false;
+        } else if (checkDraw()){
+            inputController.showWinDraw(true);
+            active = false;
+        } else {
+            currentPlayer = 1 - currentPlayer;
+            showActivePlayer();
+            if (players[currentPlayer].ai){
+                aiMove();
+            }
+        }
+
     }
     
     function getPlayer(){
@@ -117,11 +139,19 @@ const board = (function () {
         return false;
     }
 
+    function getBoardMap(){
+        let boardMap = boardHTML.map(elem => elem.innerHTML);
+        return boardMap;
+    }
+
     function startGame(){
         clearBoard();
         currentPlayer = Math.round(Math.random());
         active = true;
         showActivePlayer();
+        if (players[currentPlayer].ai){
+            aiMove();
+        }
     }
 
     function showActivePlayer(){
@@ -134,26 +164,40 @@ const board = (function () {
         }
     }
 
-
-
     return {startGame};
+})();
+
+const aiController = (function(){
+
+    /*Takes an Array of the board + the symbol for the AI player, f.ex. (['','','O','O','X','','X','',''], 'X')*/
+    function stupidMove(boardMap, isPlayerNr){
+        let boardPosition;
+        do {
+            boardPosition = Math.floor(Math.random()*9);
+        } while (boardMap[boardPosition] != '');
+
+        return boardPosition;
+    }
+
+    return {stupidMove};
 })();
 
 playerSubmit.addEventListener('click', () => {
     const player1Input = document.getElementById('player1');
     const player2Input = document.getElementById('player2');
     players[0] = playerFactory(player1Input.value, false);
-    players[1] = playerFactory(player2Input.value, false);
+    players[1] = playerFactory(player2Input.value, true);
     document.getElementById('player1Display').innerHTML = player1Input.value + ' X';
     document.getElementById('player2Display').innerHTML = player2Input.value + ' O';
     inputController.hidePlayerInput();
     board.startGame();
-
 });
 
 changePlayers.addEventListener('click', () => {
     inputController.showPlayerInput();
 });
+
+
 
 inputController.showPlayerInput();
 
