@@ -10,6 +10,21 @@
 <body>
     <div id="topContainer">
 
+        <div id="nameDisplay">
+            <div  id="player1Display">
+                dsf
+            </div>
+            <div id="player2Display">
+                dsf
+            </div>
+        </div>
+
+        <div id="playerNameInput" style='display: grid'>
+            <label for="player1">Player 1<input type="text" value="player1" id="player1"></label>
+            <label for="player2">Player 2<input type="text" value="player2" id="player2"></label>
+            <button id="playerSubmit">Accept</button>
+        </div>
+
         <div id="tictacBoard">
             <div class="Square" id="s0"></div>
             <div class="Square" id="s1"></div>
@@ -21,7 +36,8 @@
             <div class="Square" id="s7"></div>
             <div class="Square" id="s8"></div>
         </div>
-        <button id='clearButton'>Clear Board</button>
+        <button id='clearButton'>(Re-)Start Game</button>
+        <button id ='changePlayers'>Change Players</button>
     </div>
     <script src="script.js"></script>
 </body>
