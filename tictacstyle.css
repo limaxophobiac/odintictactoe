@@ -7,6 +7,11 @@ body{
     padding: 0;
 }
 
+#winDraw{
+	font-size: 2rem;
+	color: white;
+}
+
 
 #nameDisplay{
 	color: white;

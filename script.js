@@ -11,6 +11,53 @@ const playerFactory = (playername, ai) => {
     return {playername, ai};
 };
 
+const inputController = (() => {
+
+    const winDraw = document.getElementById('winDraw');
+    const winDrawText = document.querySelector('#winDraw p');
+    const winDrawButton = document.querySelector('#winDraw button');
+    winDrawButton.addEventListener('click', hideWinDraw);
+
+    function showPlayerInput(){
+        gameBoard.style.display = 'none';
+        restartButton.style.display = 'none';
+        nameDisplay.style.display = 'none';
+        changePlayers.style.display = 'none';
+        document.getElementById('playerNameInput').style.display = 'grid';
+    }
+
+    function hidePlayerInput(){
+        document.getElementById('playerNameInput').style.display = 'none';
+        gameBoard.style.display = 'grid';
+        restartButton.style.display = 'grid';
+        nameDisplay.style.display = 'grid';
+        changePlayers.style.display = 'grid';
+    }
+
+    function showWinDraw(draw, winnerName = ''){
+        gameBoard.style.display = 'none';
+        restartButton.style.display = 'none';
+        nameDisplay.style.display = 'none';
+        changePlayers.style.display = 'none';
+        winDraw.style.display = 'grid';
+        if (!draw) {
+            winDrawText.innerHTML = winnerName + ' wins!';
+        } else {
+            winDrawText.innerHTML = "Draw, you're both losers!"
+        }
+    }
+
+    function hideWinDraw(){
+        gameBoard.style.display = 'grid';
+        restartButton.style.display = 'grid';
+        nameDisplay.style.display = 'grid';
+        changePlayers.style.display = 'grid';
+        winDraw.style.display = 'none';
+    }
+
+    return {showPlayerInput, hidePlayerInput, showWinDraw};
+})();
+
 const board = (function () {
 
     const boardHTML = [];
@@ -28,10 +75,10 @@ const board = (function () {
         if (this.innerHTML === '' && active){
             this.innerHTML = playerMarkers[currentPlayer];
             if (checkWin()){
-                console.log('Player: ' + players[currentPlayer].playername + ' wins');
+                inputController.showWinDraw(false, players[currentPlayer].playername);
                 active = false;
             } else if (checkDraw()){
-                console.log("Draw, you're both losers.");
+                inputController.showWinDraw(true);
                 active = false;
             } else {
             currentPlayer = 1 - currentPlayer;
@@ -87,15 +134,10 @@ const board = (function () {
         }
     }
 
+
+
     return {startGame};
 })();
-
-gameBoard.style.display = 'none';
-restartButton.style.display = 'none';
-nameDisplay.style.display = 'none';
-changePlayers.style.display = 'none';
-
-restartButton.addEventListener('click', board.startGame);
 
 playerSubmit.addEventListener('click', () => {
     const player1Input = document.getElementById('player1');
@@ -104,18 +146,15 @@ playerSubmit.addEventListener('click', () => {
     players[1] = playerFactory(player2Input.value, false);
     document.getElementById('player1Display').innerHTML = player1Input.value + ' X';
     document.getElementById('player2Display').innerHTML = player2Input.value + ' O';
-    document.getElementById('playerNameInput').style.display = 'none';
-    gameBoard.style.display = 'grid';
-    restartButton.style.display = 'grid';
-    nameDisplay.style.display = 'grid';
-    changePlayers.style.display = 'grid';
+    inputController.hidePlayerInput();
     board.startGame();
+
 });
 
 changePlayers.addEventListener('click', () => {
-    gameBoard.style.display = 'none';
-    restartButton.style.display = 'none';
-    nameDisplay.style.display = 'none';
-    changePlayers.style.display = 'none';
-    document.getElementById('playerNameInput').style.display = 'grid';
+    inputController.showPlayerInput();
 });
+
+inputController.showPlayerInput();
+
+restartButton.addEventListener('click', board.startGame);
