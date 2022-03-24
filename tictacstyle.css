@@ -13,6 +13,15 @@ body{
 }
 
 
+#playerNameInput{
+	color: white;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: 1fr 1fr;
+	column-gap: 20px;
+	row-gap: 10px;
+}
+
 #nameDisplay{
 	color: white;
 	font-size: 1.5rem;

@@ -170,7 +170,7 @@ const board = (function () {
 const aiController = (function(){
 
     /*Takes an Array of the board + the symbol for the AI player, f.ex. (['','','O','O','X','','X','',''], 'X')*/
-    function stupidMove(boardMap, isPlayerNr){
+    function stupidMove(boardMap, isPlayerSymbol){
         let boardPosition;
         do {
             boardPosition = Math.floor(Math.random()*9);
@@ -179,14 +179,20 @@ const aiController = (function(){
         return boardPosition;
     }
 
-    return {stupidMove};
+    function goodMove(boardMap, isPlayerSymbol){
+
+    }
+
+    return {stupidMove, goodMove};
 })();
 
 playerSubmit.addEventListener('click', () => {
     const player1Input = document.getElementById('player1');
     const player2Input = document.getElementById('player2');
-    players[0] = playerFactory(player1Input.value, false);
-    players[1] = playerFactory(player2Input.value, true);
+    const player1IsAi = document.getElementById('player1Ai').checked;
+    const player2IsAi = document.getElementById('player2Ai').checked;
+    players[0] = playerFactory(player1Input.value, player1IsAi);
+    players[1] = playerFactory(player2Input.value, player2IsAi);
     document.getElementById('player1Display').innerHTML = player1Input.value + ' X';
     document.getElementById('player2Display').innerHTML = player2Input.value + ' O';
     inputController.hidePlayerInput();
