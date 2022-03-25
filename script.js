@@ -1,9 +1,6 @@
-const docMain = document.getElementById('topContainer')
 const gameBoard = document.getElementById('tictacBoard');
 const playerSubmit = document.getElementById('playerSubmit');
 const restartButton = document.getElementById('clearButton');
-const nameDisplay = document.getElementById('nameDisplay');
-const changePlayers = document.getElementById('changePlayers');
 
 let players = [];
 
@@ -13,10 +10,17 @@ const playerFactory = (playername, ai) => {
 
 const inputController = (() => {
 
+    const nameDisplay = document.getElementById('nameDisplay');
+    const changePlayers = document.getElementById('changePlayers');
     const winDraw = document.getElementById('winDraw');
     const winDrawText = document.querySelector('#winDraw p');
     const winDrawButton = document.querySelector('#winDraw button');
+ 
     winDrawButton.addEventListener('click', hideWinDraw);
+
+    changePlayers.addEventListener('click', () => {
+        showPlayerInput();
+    });
 
     function showPlayerInput(){
         gameBoard.style.display = 'none';
@@ -74,27 +78,19 @@ const board = (function () {
     function addMark() {
         if (this.innerHTML === '' && active){
             this.innerHTML = playerMarkers[currentPlayer];
-            if (checkWin()){
-                inputController.showWinDraw(false, players[currentPlayer].playername);
-                active = false;
-            } else if (checkDraw()){
-                inputController.showWinDraw(true);
-                active = false;
-            } else {
-                currentPlayer = 1 - currentPlayer;
-                showActivePlayer();
-                if (players[currentPlayer].ai){
-                    aiMove();
-                }
-            }
+            afterMove();
         }
     }
 
     function aiMove(){
         active = false;
-        let move = aiController.goodMove(getBoardMap(), playerMarkers[currentPlayer]);
+        let move = aiController.getMove(getBoardMap(), playerMarkers[currentPlayer]);
         active = true;
         boardHTML[move].innerHTML = playerMarkers[currentPlayer];
+        afterMove();
+    }
+    
+    function afterMove(){
         if (checkWin()){
             inputController.showWinDraw(false, players[currentPlayer].playername);
             active = false;
@@ -108,11 +104,6 @@ const board = (function () {
                 aiMove();
             }
         }
-
-    }
-    
-    function getPlayer(){
-        return playerMarkers[currentPlayer];
     }
 
     function clearBoard(){
@@ -171,14 +162,31 @@ const board = (function () {
 
 const aiController = (function(){
 
+    let difficulty = 1;
+
+    /*sets difficulty, 0 for easy, 1 for average, 3 for impossible*/
+    function setDifficulty(number){
+        difficulty = number;
+    }
     /*Takes an Array of the board + the symbol for the AI player, f.ex. (['','','O','O','X','','X','',''], 'X')*/
-    function stupidMove(boardMap, aiSymbol){
+    function getMove(boardMap, aiSymbol){
+        if (difficulty === 0) return stupidMove(boardMap);
+        if (difficulty === 2) return goodMove(boardMap, aiSymbol);
+        return averageMove(boardMap, aiSymbol);
+    }
+
+    function stupidMove(boardMap){
         let boardPosition;
         do {
             boardPosition = Math.floor(Math.random()*9);
         } while (boardMap[boardPosition] != '');
 
         return boardPosition;
+    }
+
+    function averageMove(boardMap, aiSymbol){
+        if (Math.random() < 0.25) return stupidMove(boardMap);
+        return goodMove(boardMap, aiSymbol);
     }
 
     function goodMove(boardMap, aiSymbol){
@@ -271,7 +279,7 @@ const aiController = (function(){
         
     }
 
-    return {stupidMove, goodMove};
+    return {getMove, setDifficulty};
 })();
 
 playerSubmit.addEventListener('click', () => {
@@ -286,11 +294,6 @@ playerSubmit.addEventListener('click', () => {
     inputController.hidePlayerInput();
     board.startGame();
 });
-
-changePlayers.addEventListener('click', () => {
-    inputController.showPlayerInput();
-});
-
 
 
 inputController.showPlayerInput();

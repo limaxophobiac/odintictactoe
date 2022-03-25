@@ -16,10 +16,12 @@ body{
 #playerNameInput{
 	color: white;
 	display: grid;
-	grid-template-columns: 1fr 1fr;
-	grid-template-rows: 1fr 1fr;
+	grid-template-columns: 1fr 1fr 2fr;
+	grid-template-rows: 1fr 1fr 1fr;
 	column-gap: 20px;
 	row-gap: 10px;
+	justify-items: center;
+	align-items: center;
 }
 
 #nameDisplay{
