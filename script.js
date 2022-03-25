@@ -91,7 +91,9 @@ const board = (function () {
     }
 
     function aiMove(){
-        let move = aiController.stupidMove(getBoardMap(), playerMarkers[currentPlayer]);
+        active = false;
+        let move = aiController.goodMove(getBoardMap(), playerMarkers[currentPlayer]);
+        active = true;
         boardHTML[move].innerHTML = playerMarkers[currentPlayer];
         if (checkWin()){
             inputController.showWinDraw(false, players[currentPlayer].playername);
@@ -190,13 +192,13 @@ const aiController = (function(){
         let bestMove = [];
         let bestScore = -1000;
         for (let elem of possibleMoves){
-            let score = minimax(elem, true);
+            let score = minimax(elem, false);
             if (score > bestScore){
                 bestScore = score;
                 bestMove = elem;
             } 
         }
-        
+
         let moveSquare;
 
         for (let i = 0; i < 9; i++){
@@ -221,7 +223,8 @@ const aiController = (function(){
     }
 
     function minimax(boardNumMap, maximizingPlayer){
-        let whoWon = evaluateBoard(boardMap, aiSymbol);
+
+        let whoWon = evaluateBoard(boardNumMap, 1);
         let isDraw = boardNumMap.every(elem => elem != 0);
         if (whoWon != 0 || isDraw){
             return whoWon;
@@ -255,14 +258,14 @@ const aiController = (function(){
         if (boardMap[0] == boardMap[4] && boardMap[0] == boardMap[8] && boardMap[0] == aiSymbol) return 1;
         if (boardMap[2] == boardMap[4] && boardMap[2] == boardMap[6] && boardMap[2] == aiSymbol) return 1;
         /*Losing board bad*/
-        if (boardMap[0] == boardMap[1] && boardMap[0] == boardMap[2] && boardMap[0] != aiSymbol && boardMap[0] != '') return -1;
-        if (boardMap[3] == boardMap[4] && boardMap[3] == boardMap[5] && boardMap[3] != aiSymbol && boardMap[3] != '') return -1;
-        if (boardMap[6] == boardMap[7] && boardMap[6] == boardMap[8] && boardMap[6] != aiSymbol && boardMap[6] != '') return -1;
-        if (boardMap[0] == boardMap[3] && boardMap[0] == boardMap[6] && boardMap[0] != aiSymbol && boardMap[0] != '') return -1;
-        if (boardMap[1] == boardMap[4] && boardMap[1] == boardMap[7] && boardMap[1] != aiSymbol && boardMap[1] != '') return -1;
-        if (boardMap[2] == boardMap[5] && boardMap[2] == boardMap[8] && boardMap[2] != aiSymbol && boardMap[2] != '') return -1;
-        if (boardMap[0] == boardMap[4] && boardMap[0] == boardMap[8] && boardMap[0] != aiSymbol && boardMap[0] != '') return -1;
-        if (boardMap[2] == boardMap[4] && boardMap[2] == boardMap[6] && boardMap[2] != aiSymbol && boardMap[2] != '') return -1;
+        if (boardMap[0] == boardMap[1] && boardMap[0] == boardMap[2] && boardMap[0] != aiSymbol && boardMap[0] != 0) return -1;
+        if (boardMap[3] == boardMap[4] && boardMap[3] == boardMap[5] && boardMap[3] != aiSymbol && boardMap[3] != 0) return -1;
+        if (boardMap[6] == boardMap[7] && boardMap[6] == boardMap[8] && boardMap[6] != aiSymbol && boardMap[6] != 0) return -1;
+        if (boardMap[0] == boardMap[3] && boardMap[0] == boardMap[6] && boardMap[0] != aiSymbol && boardMap[0] != 0) return -1;
+        if (boardMap[1] == boardMap[4] && boardMap[1] == boardMap[7] && boardMap[1] != aiSymbol && boardMap[1] != 0) return -1;
+        if (boardMap[2] == boardMap[5] && boardMap[2] == boardMap[8] && boardMap[2] != aiSymbol && boardMap[2] != 0) return -1;
+        if (boardMap[0] == boardMap[4] && boardMap[0] == boardMap[8] && boardMap[0] != aiSymbol && boardMap[0] != 0) return -1;
+        if (boardMap[2] == boardMap[4] && boardMap[2] == boardMap[6] && boardMap[2] != aiSymbol && boardMap[2] != 0) return -1;
         /*Draw is neutral*/
         return 0;
         
