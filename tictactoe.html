@@ -16,27 +16,23 @@
         </div>
 
         <div id="nameDisplay">
-            <div  id="player1Display">
-                dsf
-            </div>
-            <div id="player2Display">
-                dsf
-            </div>
+            <div  id="player1Display"></div>
+            <div id="player2Display"></div>
         </div>
 
         <div id="playerNameInput">
-            <label for="player1" id="player1Label">Player 1<br><input type="text" value="player1" id="player1"></label>
+            <label for="player1" id="player1Label">Player 1<br><input type="text" placeholder="player1" id="player1"></label>
 
 
-            <label for="player2">Player 2<input type="text" value="player2" id="player2"></label>
-            <label for="player2Ai">AI?<input id="player2Ai" type="checkbox"></label>
+            <label for="player2" id="player2Label">Player 2<input type="text" placeholder="player2" id="player2"></label>
+            <label for="player2Ai" id="aiLabel">AI?<input id="player2Ai" type="checkbox"></label>
             <label for="ai2Difficulty" id="difficultySelect" style="display: none">AI difficulty:<select id="ai2Difficulty" name="ai2Difficulty">
                 <option value="EASY">EASY</option>
                 <option value="AVERAGE">AVERAGE</option>
                 <option value="HARD">HARD</option>
             </select></label>
 
-            <button id="playerSubmit">Accept</button>
+            <button id="playerSubmit">Start Game</button>
         </div>
 
         <div id="tictacBoard">

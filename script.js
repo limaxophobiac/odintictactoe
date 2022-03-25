@@ -148,12 +148,18 @@ const board = (function () {
     }
 
     function showActivePlayer(){
+        const p1Display = document.getElementById('player1Display');
+        const p2Display = document.getElementById('player2Display');
         if (currentPlayer === 0){
-            document.getElementById('player1Display').style.fontSize = '2rem';
-            document.getElementById('player2Display').style.fontSize = '1rem';
+            p1Display.style.fontSize = '2rem';
+            p1Display.style.color = 'rgb(180, 120, 0)';
+            p2Display.style.fontSize = '1rem';
+            p2Display.style.color = 'lightgrey';
         } else {
-            document.getElementById('player1Display').style.fontSize = '1rem';
-            document.getElementById('player2Display').style.fontSize = '2rem';
+            p2Display.style.fontSize = '2rem';
+            p2Display.style.color = 'rgb(180, 120, 0)';
+            p1Display.style.fontSize = '1rem';
+            p1Display.style.color = 'lightgrey';
         }
     }
 
@@ -296,10 +302,23 @@ playerSubmit.addEventListener('click', () => {
     const player2IsAi = document.getElementById('player2Ai').checked;
     let difficulty = document.getElementById('ai2Difficulty').value;
     aiController.setDifficulty(difficulty);
-    players[0] = playerFactory(player1Input.value, false);
-    players[1] = playerFactory(player2Input.value, player2IsAi);
-    document.getElementById('player1Display').innerHTML = player1Input.value + ' X';
-    document.getElementById('player2Display').innerHTML = player2Input.value + ' O';
+    
+    
+    if (player1Input.value != ''){
+        players[0] = playerFactory(player1Input.value, false);
+        document.getElementById('player1Display').innerHTML = player1Input.value + ' X';
+    } else {
+        players[0] = playerFactory('player1', false);
+        document.getElementById('player1Display').innerHTML = 'player1 X';
+    }
+    if (player2Input.value != ''){
+        players[1] = playerFactory(player2Input.value, player2IsAi);
+        document.getElementById('player2Display').innerHTML = player2Input.value + ' O';
+    } else {
+        players[1] = playerFactory('player2', player2IsAi);
+        document.getElementById('player2Display').innerHTML = 'player2 O';
+    }
+
     inputController.hidePlayerInput();
     board.startGame();
 });
