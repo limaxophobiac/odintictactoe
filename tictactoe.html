@@ -25,21 +25,15 @@
         </div>
 
         <div id="playerNameInput">
-            <label for="player1">Player 1<input type="text" value="player1" id="player1"></label>
-            <label for="player1Ai">AI?<input id="player1Ai" type="checkbox"></label>
-            <label for="ai1Difficulty">AI difficulty:<select id="ai1Difficulty" name="ai1Difficulty">
-                <option value="Easy">Easy</option>
-                <option value="Average">Average></option>
-                <option value="Hard">Hard</option>
-            </select></label>
+            <label for="player1" id="player1Label">Player 1<br><input type="text" value="player1" id="player1"></label>
 
 
             <label for="player2">Player 2<input type="text" value="player2" id="player2"></label>
             <label for="player2Ai">AI?<input id="player2Ai" type="checkbox"></label>
-            <label for="ai2Difficulty">AI difficulty:<select id="ai2Difficulty" name="ai2Difficulty">
-                <option value="Easy">Easy</option>
-                <option value="Average">Average></option>
-                <option value="Hard">Hard</option>
+            <label for="ai2Difficulty" id="difficultySelect" style="display: none">AI difficulty:<select id="ai2Difficulty" name="ai2Difficulty">
+                <option value="EASY">EASY</option>
+                <option value="AVERAGE">AVERAGE</option>
+                <option value="HARD">HARD</option>
             </select></label>
 
             <button id="playerSubmit">Accept</button>

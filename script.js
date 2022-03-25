@@ -162,16 +162,16 @@ const board = (function () {
 
 const aiController = (function(){
 
-    let difficulty = 1;
+    let difficulty = 'EASY';
 
-    /*sets difficulty, 0 for easy, 1 for average, 3 for impossible*/
-    function setDifficulty(number){
-        difficulty = number;
+    /*sets difficulty, 'EASY', 'AVERAGE', or 'HARD'*/
+    function setDifficulty(difficultyInput){
+        difficulty = difficultyInput;
     }
     /*Takes an Array of the board + the symbol for the AI player, f.ex. (['','','O','O','X','','X','',''], 'X')*/
     function getMove(boardMap, aiSymbol){
-        if (difficulty === 0) return stupidMove(boardMap);
-        if (difficulty === 2) return goodMove(boardMap, aiSymbol);
+        if (difficulty === 'EASY') return stupidMove(boardMap);
+        if (difficulty === 'HARD') return goodMove(boardMap, aiSymbol);
         return averageMove(boardMap, aiSymbol);
     }
 
@@ -281,13 +281,22 @@ const aiController = (function(){
 
     return {getMove, setDifficulty};
 })();
+const difficultySelect = document.getElementById('difficultySelect');
+const p2IsAi = document.getElementById('player2Ai');
+p2IsAi.addEventListener('change', () => {
+    if (p2IsAi.checked) {difficultySelect.style.display = 'block';}
+
+    else {difficultySelect.style.display = 'none';}
+
+});
 
 playerSubmit.addEventListener('click', () => {
     const player1Input = document.getElementById('player1');
     const player2Input = document.getElementById('player2');
-    const player1IsAi = document.getElementById('player1Ai').checked;
     const player2IsAi = document.getElementById('player2Ai').checked;
-    players[0] = playerFactory(player1Input.value, player1IsAi);
+    let difficulty = document.getElementById('ai2Difficulty').value;
+    aiController.setDifficulty(difficulty);
+    players[0] = playerFactory(player1Input.value, false);
     players[1] = playerFactory(player2Input.value, player2IsAi);
     document.getElementById('player1Display').innerHTML = player1Input.value + ' X';
     document.getElementById('player2Display').innerHTML = player2Input.value + ' O';
