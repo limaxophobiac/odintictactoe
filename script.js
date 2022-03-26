@@ -1,6 +1,6 @@
 let tictacPlayers = [];
 
-const playerFactory = (playername, ai) => {
+const tictacPlayerFactory = (playername, ai) => {
     return {playername, ai};
 };
 
@@ -22,9 +22,16 @@ const inputController = (() => {
     winDrawButton.addEventListener('click', hideWinDraw);
 
     p2IsAi.addEventListener('change', () => {
-        if (p2IsAi.checked) {difficultySelect.style.display = 'block';}
-
-        else {difficultySelect.style.display = 'none';}
+        const aiLabel = document.getElementById('aiLabel');
+        if (p2IsAi.checked) {
+            difficultySelect.style.visibility = 'visible';
+            aiLabel.style.color = 'white';
+            aiLabel.style.textShadow = '0px 0px 3px rgb(220,220,220)';
+        } else {
+            difficultySelect.style.visibility = 'hidden';
+            aiLabel.style.color ='rgb(220,220,220)';
+            aiLabel.style.textShadow = 'none';
+        }
 
     });
 
@@ -237,7 +244,11 @@ const aiController = (function(){
             if (score > bestScore){
                 bestScore = score;
                 bestMove = elem;
-            } 
+            }
+            /*add a bit of randomness betweem equal options*/
+            else if (score === bestScore && Math.random() > 0.7){
+                bestMove = elem;
+            }
         }
 
         let moveSquare;
@@ -324,17 +335,17 @@ inputController.playerSubmit.addEventListener('click', () => {
     
     
     if (player1Input.value != ''){
-        tictacPlayers[0] = playerFactory(player1Input.value, false);
+        tictacPlayers[0] = tictacPlayerFactory(player1Input.value, false);
         document.getElementById('player1Display').innerHTML = player1Input.value + '<p>X</p>';
     } else {
-        tictacPlayers[0] = playerFactory('player1', false);
+        tictacPlayers[0] = tictacPlayerFactory('player1', false);
         document.getElementById('player1Display').innerHTML = 'player1 <p>X</p>';
     }
     if (player2Input.value != ''){
-        tictacPlayers[1] = playerFactory(player2Input.value, player2IsAi);
+        tictacPlayers[1] = tictacPlayerFactory(player2Input.value, player2IsAi);
         document.getElementById('player2Display').innerHTML = player2Input.value + '<p>O</p>';
     } else {
-        tictacPlayers[1] = playerFactory('player2', player2IsAi);
+        tictacPlayers[1] = tictacPlayerFactory('player2', player2IsAi);
         document.getElementById('player2Display').innerHTML = 'player2 <p>O</p>';
     }
 
