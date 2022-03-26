@@ -15,10 +15,7 @@
             <button>Close</button>
         </div>
 
-        <div id="nameDisplay">
-            <div  id="player1Display"></div>
-            <div id="player2Display"></div>
-        </div>
+
 
         <div id="playerNameInput">
             <label for="player1" id="player1Label">Player 1<br><input type="text" placeholder="player1" id="player1"></label>
@@ -35,19 +32,30 @@
             <button id="playerSubmit">Start Game</button>
         </div>
 
-        <div id="tictacBoard">
-            <div class="Square" id="s0"></div>
-            <div class="Square" id="s1"></div>
-            <div class="Square" id="s2"></div>
-            <div class="Square" id="s3"></div>
-            <div class="Square" id="s4"></div>
-            <div class="Square" id="s5"></div>
-            <div class="Square" id="s6"></div>
-            <div class="Square" id="s7"></div>
-            <div class="Square" id="s8"></div>
-        </div>
-        <button id='clearButton'>(Re-)Start Game</button>
-        <button id ='changePlayers'>Change Players</button>
+        <div id='gameContainer' style="display: none;">
+            <div id="player1Display"></div>
+            
+
+
+            <div id="tictacBoard">
+                <div class="Square" id="s0"></div>
+                <div class="Square" id="s1"></div>
+                <div class="Square" id="s2"></div>
+                <div class="Square" id="s3"></div>
+                <div class="Square" id="s4"></div>
+                <div class="Square" id="s5"></div>
+                <div class="Square" id="s6"></div>
+                <div class="Square" id="s7"></div>
+                <div class="Square" id="s8"></div>
+            </div>
+
+            <div id="player2Display"></div>
+
+            <div id='gameButtons'>
+                <button id='clearButton'>New Round</button>
+                <button id ='changePlayers'>New Game</button>
+           </div>
+       </div>
     </div>
     <script src="script.js"></script>
 </body>

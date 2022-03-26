@@ -1,6 +1,7 @@
 const gameBoard = document.getElementById('tictacBoard');
 const playerSubmit = document.getElementById('playerSubmit');
 const restartButton = document.getElementById('clearButton');
+const gameContainer = document.getElementById('gameContainer');
 
 let players = [];
 
@@ -10,7 +11,8 @@ const playerFactory = (playername, ai) => {
 
 const inputController = (() => {
 
-    const nameDisplay = document.getElementById('nameDisplay');
+    const player1Display = document.getElementById('player1Display');
+    const player2Display = document.getElementById('player2Display');
     const changePlayers = document.getElementById('changePlayers');
     const winDraw = document.getElementById('winDraw');
     const winDrawText = document.querySelector('#winDraw p');
@@ -23,25 +25,31 @@ const inputController = (() => {
     });
 
     function showPlayerInput(){
+        gameContainer.style.display = 'none';
         gameBoard.style.display = 'none';
         restartButton.style.display = 'none';
-        nameDisplay.style.display = 'none';
+        player1Display.style.display = 'none';
+        player2Display.style.display = 'none';
         changePlayers.style.display = 'none';
         document.getElementById('playerNameInput').style.display = 'grid';
     }
 
     function hidePlayerInput(){
         document.getElementById('playerNameInput').style.display = 'none';
+        gameContainer.style.display = 'grid';
         gameBoard.style.display = 'grid';
         restartButton.style.display = 'grid';
-        nameDisplay.style.display = 'grid';
+        player1Display.style.display = 'grid';
+        player2Display.style.display = 'grid';
         changePlayers.style.display = 'grid';
     }
 
     function showWinDraw(draw, winnerName = ''){
+        gameContainer.style.display = 'none';
         gameBoard.style.display = 'none';
         restartButton.style.display = 'none';
-        nameDisplay.style.display = 'none';
+        player1Display.style.display = 'none';
+        player2Display.style.display = 'none';
         changePlayers.style.display = 'none';
         winDraw.style.display = 'grid';
         if (!draw) {
@@ -52,9 +60,11 @@ const inputController = (() => {
     }
 
     function hideWinDraw(){
+        gameContainer.style.display = 'grid';
         gameBoard.style.display = 'grid';
         restartButton.style.display = 'grid';
-        nameDisplay.style.display = 'grid';
+        player1Display.style.display = 'grid';
+        player2Display.style.display = 'grid';
         changePlayers.style.display = 'grid';
         winDraw.style.display = 'none';
     }
@@ -306,17 +316,17 @@ playerSubmit.addEventListener('click', () => {
     
     if (player1Input.value != ''){
         players[0] = playerFactory(player1Input.value, false);
-        document.getElementById('player1Display').innerHTML = player1Input.value + ' X';
+        document.getElementById('player1Display').innerHTML = player1Input.value + '<p>X</p>';
     } else {
         players[0] = playerFactory('player1', false);
-        document.getElementById('player1Display').innerHTML = 'player1 X';
+        document.getElementById('player1Display').innerHTML = 'player1 <p>X</p>';
     }
     if (player2Input.value != ''){
         players[1] = playerFactory(player2Input.value, player2IsAi);
-        document.getElementById('player2Display').innerHTML = player2Input.value + ' O';
+        document.getElementById('player2Display').innerHTML = player2Input.value + '<p>O</p>';
     } else {
         players[1] = playerFactory('player2', player2IsAi);
-        document.getElementById('player2Display').innerHTML = 'player2 O';
+        document.getElementById('player2Display').innerHTML = 'player2 <p>O</p>';
     }
 
     inputController.hidePlayerInput();
