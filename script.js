@@ -1,9 +1,4 @@
-const gameBoard = document.getElementById('tictacBoard');
-const playerSubmit = document.getElementById('playerSubmit');
-const restartButton = document.getElementById('clearButton');
-const gameContainer = document.getElementById('gameContainer');
-
-let players = [];
+let tictacPlayers = [];
 
 const playerFactory = (playername, ai) => {
     return {playername, ai};
@@ -11,14 +6,27 @@ const playerFactory = (playername, ai) => {
 
 const inputController = (() => {
 
+    const playerSubmit = document.getElementById('playerSubmit');
+    const restartButton = document.getElementById('clearButton');
+    const gameContainer = document.getElementById('gameContainer');
+    const gameBoard = document.getElementById('tictacBoard');
     const player1Display = document.getElementById('player1Display');
     const player2Display = document.getElementById('player2Display');
     const changePlayers = document.getElementById('changePlayers');
     const winDraw = document.getElementById('winDraw');
     const winDrawText = document.querySelector('#winDraw p');
     const winDrawButton = document.querySelector('#winDraw button');
+    const difficultySelect = document.getElementById('difficultySelect');
+    const p2IsAi = document.getElementById('player2Ai');
  
     winDrawButton.addEventListener('click', hideWinDraw);
+
+    p2IsAi.addEventListener('change', () => {
+        if (p2IsAi.checked) {difficultySelect.style.display = 'block';}
+
+        else {difficultySelect.style.display = 'none';}
+
+    });
 
     changePlayers.addEventListener('click', () => {
         showPlayerInput();
@@ -69,7 +77,32 @@ const inputController = (() => {
         winDraw.style.display = 'none';
     }
 
-    return {showPlayerInput, hidePlayerInput, showWinDraw};
+    function showActivePlayer(currentPlayer){
+        const p1SymbolDisplay = document.querySelector('#player1Display p');
+        const p2SymbolDisplay = document.querySelector('#player2Display p');
+        if (currentPlayer === 0){
+            p1SymbolDisplay.style.fontSize = 'max(80px, 16vh)';
+            p1SymbolDisplay.style.textShadow = '0px 0px 10px rgb(220,220,220)';
+            player1Display.style.color = 'white';
+            player1Display.style.textShadow = '0px 0px 5px rgb(220,220,220)';
+            p2SymbolDisplay.style.fontSize = 'max(40px, 8vh)';
+            player2Display.style.color = 'rgb(220,220,220)';
+            player2Display.style.textShadow = 'none';
+            p2SymbolDisplay.style.textShadow = 'mpme';
+        } else {
+            p2SymbolDisplay.style.fontSize = 'max(80px, 16vh)';
+            p2SymbolDisplay.style.textShadow = '0px 0px 10px rgb(220,220,220)';
+            player2Display.style.color = 'white';
+            player2Display.style.textShadow = '0px 0px 5px rgb(220,220,220)';
+            p1SymbolDisplay.style.fontSize = 'max(40px, 8vh)';
+            player1Display.style.color = 'rgb(220,220,220)';
+            player1Display.style.textShadow = 'none';
+            p1SymbolDisplay.style.textShadow = 'none';
+        }
+    }
+
+
+    return {showPlayerInput, hidePlayerInput, showWinDraw, showActivePlayer, playerSubmit, restartButton};
 })();
 
 const board = (function () {
@@ -102,15 +135,15 @@ const board = (function () {
     
     function afterMove(){
         if (checkWin()){
-            inputController.showWinDraw(false, players[currentPlayer].playername);
+            inputController.showWinDraw(false, tictacPlayers[currentPlayer].playername);
             active = false;
         } else if (checkDraw()){
             inputController.showWinDraw(true);
             active = false;
         } else {
             currentPlayer = 1 - currentPlayer;
-            showActivePlayer();
-            if (players[currentPlayer].ai){
+            inputController.showActivePlayer(currentPlayer);
+            if (tictacPlayers[currentPlayer].ai){
                 aiMove();
             }
         }
@@ -151,25 +184,9 @@ const board = (function () {
         clearBoard();
         currentPlayer = Math.round(Math.random());
         active = true;
-        showActivePlayer();
-        if (players[currentPlayer].ai){
+        inputController.showActivePlayer(currentPlayer);
+        if (tictacPlayers[currentPlayer].ai){
             aiMove();
-        }
-    }
-
-    function showActivePlayer(){
-        const p1Display = document.getElementById('player1Display');
-        const p2Display = document.getElementById('player2Display');
-        if (currentPlayer === 0){
-            p1Display.style.fontSize = '2rem';
-            p1Display.style.color = 'rgb(180, 120, 0)';
-            p2Display.style.fontSize = '1rem';
-            p2Display.style.color = 'lightgrey';
-        } else {
-            p2Display.style.fontSize = '2rem';
-            p2Display.style.color = 'rgb(180, 120, 0)';
-            p1Display.style.fontSize = '1rem';
-            p1Display.style.color = 'lightgrey';
         }
     }
 
@@ -297,16 +314,8 @@ const aiController = (function(){
 
     return {getMove, setDifficulty};
 })();
-const difficultySelect = document.getElementById('difficultySelect');
-const p2IsAi = document.getElementById('player2Ai');
-p2IsAi.addEventListener('change', () => {
-    if (p2IsAi.checked) {difficultySelect.style.display = 'block';}
 
-    else {difficultySelect.style.display = 'none';}
-
-});
-
-playerSubmit.addEventListener('click', () => {
+inputController.playerSubmit.addEventListener('click', () => {
     const player1Input = document.getElementById('player1');
     const player2Input = document.getElementById('player2');
     const player2IsAi = document.getElementById('player2Ai').checked;
@@ -315,17 +324,17 @@ playerSubmit.addEventListener('click', () => {
     
     
     if (player1Input.value != ''){
-        players[0] = playerFactory(player1Input.value, false);
+        tictacPlayers[0] = playerFactory(player1Input.value, false);
         document.getElementById('player1Display').innerHTML = player1Input.value + '<p>X</p>';
     } else {
-        players[0] = playerFactory('player1', false);
+        tictacPlayers[0] = playerFactory('player1', false);
         document.getElementById('player1Display').innerHTML = 'player1 <p>X</p>';
     }
     if (player2Input.value != ''){
-        players[1] = playerFactory(player2Input.value, player2IsAi);
+        tictacPlayers[1] = playerFactory(player2Input.value, player2IsAi);
         document.getElementById('player2Display').innerHTML = player2Input.value + '<p>O</p>';
     } else {
-        players[1] = playerFactory('player2', player2IsAi);
+        tictacPlayers[1] = playerFactory('player2', player2IsAi);
         document.getElementById('player2Display').innerHTML = 'player2 <p>O</p>';
     }
 
@@ -336,4 +345,4 @@ playerSubmit.addEventListener('click', () => {
 
 inputController.showPlayerInput();
 
-restartButton.addEventListener('click', board.startGame);
+inputController.restartButton.addEventListener('click', board.startGame);
